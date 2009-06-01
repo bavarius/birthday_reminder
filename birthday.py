@@ -21,7 +21,7 @@ def read_input(fname):
         lines = input.readlines()
         input.close()
     except:
-        print "'" + birthday_file + "'", "kann nicht geoeffnet werden."
+        print u"'%s' kann nicht geöffnet werden." % birthday_file
         lines = []
 
     return lines
@@ -50,7 +50,7 @@ def get_age_string(persons_name, d, m, year_of_upcoming_bday):
 
     if len(year_of_birth.findall(persons_name)) > 0: # get year from string using regular expression
         byear = int(year_of_birth.findall(persons_name)[0])
-        return ' wird ' + str(year_of_upcoming_bday - byear) + ' am ' + d + '.' + m + '.' + str(year_of_upcoming_bday)
+        return u' wird %s am %s.%s.%s' % (str(year_of_upcoming_bday - byear), d, m, str(year_of_upcoming_bday))
     else:
         return ''
 
@@ -81,7 +81,9 @@ def main():
 
         if day_diff < threshold_days_before_birthday:
             # display of birthday triggered - do formatting for output
-            bday_childs_name = line[2].replace('\n', '')
+            # The input file has a iso8859-1 encoding. The following line takes care of this and
+            # converts the name to unicode. Apapt this if input file is in a different format!
+            bday_childs_name = unicode(line[2].replace('\n', ''), "iso8859-1")
             age_string = get_age_string(bday_childs_name, d, m, year_of_upcoming_bday)
             friendly_time = get_friendly_time(day_diff)
             print bday_childs_name.split('(')[0].strip() + age_string, '-', friendly_time
