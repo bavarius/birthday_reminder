@@ -52,7 +52,7 @@ def get_age_string(persons_name, d, m, year_of_upcoming_bday):
         byear = int(year_of_birth.findall(persons_name)[0])
         return u' wird %s am %s.%s.%s' % (str(year_of_upcoming_bday - byear), d, m, str(year_of_upcoming_bday))
     else:
-        return ''
+        return u' am %s.%s.%s' % (d, m, str(year_of_upcoming_bday))
 
 def get_friendly_time(day_diff):
     """
