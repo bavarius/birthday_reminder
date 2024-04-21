@@ -1,4 +1,4 @@
 Mein dummy-file
 Nur mal um zu schauen, was mit
-den Zeilenenden zwischne Linux und Windows
+den Zeilenenden zwischen Linux und Windows
 passiert...
