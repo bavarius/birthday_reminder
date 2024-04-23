@@ -1,4 +1,0 @@
-Mein dummy-file
-Nur mal um zu schauen, was mit
-den Zeilenenden zwischen Linux und Windows
-passiert...

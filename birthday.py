@@ -1,30 +1,26 @@
 #!usr/bin/python
 # -*- coding: iso-8859-15 -*-
+import argparse
+import csv
 import datetime
 import re
 
 # program parameters
 threshold_days_before_birthday = 15
-birthday_file = 'birthday.ini'
 
 # initialisations
-year_of_birth = re.compile('\d{4}') #regular expression: 4 digits for year-of-birth
+year_of_birth = re.compile('\\d{4}') #regular expression: 4 digits for year-of-birth
 
-def read_input(fname):
-    """
-    reads birthdays from file
-    """
+def file_read_csv(file_name):
+    input = []
 
-    #open file, read lines and close it
-    try:
-        input = open(fname, 'r')
-        lines = input.readlines()
-        input.close()
-    except:
-        print u"'%s' kann nicht geöffnet werden." % birthday_file
-        lines = []
+    with open(file_name, 'r', newline='') as csv_file:
+        reader = csv.DictReader(csv_file, delimiter=';')
+        for row in reader:
+            print(row['Name'], row['dd'], row['mm'], row['yyyy'])
+            input.append(row)
 
-    return lines
+    return input
 
 def get_day_difference(d, m, today):
     """
@@ -72,21 +68,23 @@ def main():
     """
 
     today = datetime.date.today()
-    birthday_list = read_input(birthday_file)
+
+    parser = argparse.ArgumentParser(description='Birthday Reminder')
+    parser.add_argument('-c', '--csv', required=True, type=str, help="Geburtstagsdatei im csv-Format (Trennzeichen: ';' - Semikolon)")
+
+    args = parser.parse_args()
+
+    if args.csv is not None:
+        birthday_list = file_read_csv(args.csv)
 
     for element in birthday_list:
-        line = element.partition(' ')
-        d, m, trash = line[0].split('.')
-        year_of_upcoming_bday, day_diff = get_day_difference(int(d), int(m), today)
-
+        year_of_upcoming_bday, day_diff = get_day_difference(int(element['dd']), int(element['mm']), today)
         if day_diff < threshold_days_before_birthday:
             # display of birthday triggered - do formatting for output
-            # The input file has a iso8859-1 encoding. The following line takes care of this and
-            # converts the name to unicode. Apapt this if input file is in a different format!
-            bday_childs_name = unicode(line[2].replace('\n', ''), "iso8859-1")
-            age_string = get_age_string(bday_childs_name, d, m, year_of_upcoming_bday)
+            bday_childs_name = element['Name']
+            age_string = get_age_string(bday_childs_name, int(element['dd']), int(element['mm']), year_of_upcoming_bday)
             friendly_time = get_friendly_time(day_diff)
-            print bday_childs_name.split('(')[0].strip() + age_string, '-', friendly_time
+            print(bday_childs_name.split('(')[0].strip() + age_string, '-', friendly_time)
 
 if __name__ == "__main__":
     main()
