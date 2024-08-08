@@ -77,7 +77,7 @@ def main():
             # display of birthday triggered - do formatting for output
             bday_childs_name = element['Name']
             year_of_birth = 0
-            if element['yyyy'] is not None:
+            if element['yyyy']:
                 year_of_birth = int(element['yyyy'])
             age_string = get_age_string(bday_childs_name, int(element['dd']), int(element['mm']), year_of_birth, year_of_upcoming_bday)
             friendly_time = get_friendly_time(day_diff)
